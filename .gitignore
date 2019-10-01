@@ -1,0 +1,6 @@
+*.pyc
+*.build
+*.egg-info
+build/
+dist/
+requirements.locked
