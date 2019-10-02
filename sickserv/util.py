@@ -118,7 +118,7 @@ def get_key(sysid):
         return INIT_KEY
     try:
         return KEY_TABLE[sysid]
-    except:
+    except KeyError:
         raise SysIDNotFound()
 
 
