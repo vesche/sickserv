@@ -10,9 +10,9 @@ import lz4.frame
 from .rc4 import encrypt, decrypt
 from string import ascii_lowercase as alphabet
 
-__version__ = '0.0.1'
+__version__ = '0.0.2'
 
-banner = r"""
+BANNER = r"""
   _____ ____   __  __  _  _____   ___  ____  __ __ 
  / ___/|    | /  ]|  |/ ]/ ___/  /  _]|    \|  |  |
 (   \_  |  | /  / |  ' /(   \_  /  [_ |  D  )  |  |
@@ -23,6 +23,8 @@ banner = r"""
 
     v{ver} - {url} 
 """.format(ver=__version__, url='https://github.com/vesche/sickserv')
+INIT_KEY = 'sickservsickserv'
+KEY_TABLE = {}
 
 
 def base64_encode(data):
@@ -70,14 +72,10 @@ def unprep_payload(payload):
     return dict_payload
 
 
-class PayloadNotDict(Exception):
-    pass
-
-
-def process_payload(key, payload):
-    if type(payload) != dict:
-        raise PayloadNotDict()
-
+def process_payload(sysid, payload, key=None):
+    # lookup key if none given
+    if not key:
+        key = get_key(sysid)
     # prep
     p_payload = prep_payload(payload)
     # compress
@@ -90,7 +88,10 @@ def process_payload(key, payload):
     return e_payload
 
 
-def unprocess_payload(key, payload):
+def unprocess_payload(sysid, payload, key=None):
+    # lookup key if none given
+    if not key:
+        key = get_key(sysid)
     # decrypt
     d_response = rc4_decrypt(key, payload)
     # base64 decode
@@ -105,3 +106,26 @@ def unprocess_payload(key, payload):
 
 def gen_random_key(length=16):
     return ''.join([random.choice(alphabet) for _ in range(length)])
+
+
+class SysIDNotFound(Exception):
+    pass
+
+
+def get_key(sysid):
+    if sysid not in KEY_TABLE:
+        KEY_TABLE[sysid] = INIT_KEY
+        return INIT_KEY
+    try:
+        return KEY_TABLE[sysid]
+    except:
+        raise SysIDNotFound()
+
+
+def set_key(sysid, new_key):
+    KEY_TABLE[sysid] = new_key
+
+
+def set_init_key(init_key):
+    global INIT_KEY
+    INIT_KEY = init_key

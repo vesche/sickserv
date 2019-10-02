@@ -9,7 +9,6 @@ payload = {
 }
 
 ssc = SickServWSClient(key, '127.0.0.1', port=1337)
-ssc.subscribe('test')
 ssc.send(payload)
 response = ssc.recv('test')
 print(response)
