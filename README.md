@@ -25,6 +25,8 @@ recv (HTTPS) -> RC4 decrypt -> base64 decode -> LZ4 decompress -> base64 decode 
 
 ## Simple Example (non-WebSocket)
 
+More documentation/details/examples to come...
+
 Server:
 ```python
 from sickserv import server
