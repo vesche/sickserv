@@ -51,6 +51,10 @@ def rc4_decrypt(key, data):
     return str.encode(decrypt(key, data))
 
 
+class DecryptionError(Exception):
+    pass
+
+
 def prep_payload(payload):
     """
     base64 encode data, utf-8 decode, return json as bytes
@@ -93,7 +97,10 @@ def unprocess_payload(sysid, payload, key=None):
     if not key:
         key = get_key(sysid)
     # decrypt
-    d_response = rc4_decrypt(key, payload)
+    try:
+        d_response = rc4_decrypt(key, payload)
+    except UnicodeDecodeError:
+        raise DecryptionError('Could not decrypt payload, wrong key?')
     # base64 decode
     b_response = base64_decode(d_response)
     # decompress

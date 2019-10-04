@@ -26,10 +26,10 @@ class WSEndpointNotFound(Exception):
 
 def check_payload(payload):
     if type(payload) != dict:
-        raise PayloadNotDict()
-    
+        raise PayloadNotDict('Payload must be a dictionary, received: {0}'.format(type(payload)))
+
     if 'endpoint' not in payload:
-        raise EndpointUndefined()
+        raise EndpointUndefined('You must supply an "endpoint" in the payload!')
 
     return payload
 
