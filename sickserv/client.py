@@ -24,7 +24,7 @@ class WSEndpointNotFound(Exception):
     pass
 
 
-def fasten_payload(payload):
+def check_payload(payload):
     if type(payload) != dict:
         raise PayloadNotDict()
     
@@ -48,7 +48,7 @@ class SickServClient:
         self.key = response['key'].decode('utf-8')
 
     def send(self, payload):
-        payload = fasten_payload(payload)
+        payload = check_payload(payload)
         endpoint = payload.pop('endpoint')
         enc_payload = process_payload(SYSID, payload, key=self.key)
         url = self.url + endpoint + '/' + SYSID
@@ -92,7 +92,7 @@ class SickServWSClient:
         self.key = response['key'].decode('utf-8')
 
     def send(self, payload):
-        payload = fasten_payload(payload)
+        payload = check_payload(payload)
         endpoint = payload.pop('endpoint')
         self._subscribe(endpoint)
         enc_payload = process_payload(self.key, payload)
