@@ -2,7 +2,6 @@
 sickserv.client
 """
 
-import os
 import uuid
 import requests
 import websocket
@@ -26,21 +25,24 @@ class WSEndpointNotFound(Exception):
 
 def check_payload(payload):
     if type(payload) != dict:
-        raise PayloadNotDict('Payload must be a dictionary, received: {0}'.format(type(payload)))
-
+        raise PayloadNotDict(
+            'Payload must be a dictionary, received: {0}'.format(type(payload))
+        )
     if 'endpoint' not in payload:
-        raise EndpointUndefined('You must supply an "endpoint" in the payload!')
-
+        raise EndpointUndefined(
+            'You must supply an "endpoint" in the payload!'
+        )
     return payload
 
 
 class SickServClient:
     def __init__(self, key, server, port=443):
         self.key = key
-        self.server = server
-        self.port = str(port)
-        self.url = 'http://{s}:{p}/'.format(s=self.server, p=self.port)
         self.session = requests.Session()
+        if port == 443:
+            self.url = 'https://{s}/'.format(s=server)
+        else:
+            self.url = 'http://{s}:{p}/'.format(s=server, p=port)
 
     def rekey(self, key='', length=16):
         payload = {'endpoint': 'rekey', 'key': key, 'length': str(length)}
@@ -48,12 +50,16 @@ class SickServClient:
         self.key = response['key'].decode('utf-8')
 
     def send(self, payload):
+        # ensure payload is proper
         payload = check_payload(payload)
         endpoint = payload.pop('endpoint')
+        # encrypt payload
         enc_payload = process_payload(SYSID, payload, key=self.key)
+        # send encrypted payload
         url = self.url + endpoint + '/' + SYSID
         response = self.session.request('POST', url, data=enc_payload)
         response.raise_for_status()
+        # decrypt response
         dec_payload = unprocess_payload(SYSID, response.content, key=self.key)
         return dec_payload
 
