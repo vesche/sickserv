@@ -10,7 +10,7 @@ import lz4.frame
 from .rc4 import encrypt, decrypt
 from string import ascii_lowercase as alphabet
 
-__version__ = '0.0.2'
+__version__ = '0.0.3'
 
 BANNER = r"""
   _____ ____   __  __  _  _____   ___  ____  __ __ 

@@ -1,7 +1,7 @@
-from sickserv import server
-from sickserv.server import response, set_init_key
+from sickserv import server, set_init_key
+from sickserv.server import response
 
-server.set_init_key('yellow-submarine')
+set_init_key('yellow-submarine')
 
 @server.app.route('/test/<sysid>', methods=['POST',])
 async def test(request, sysid):

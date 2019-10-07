@@ -15,6 +15,8 @@ $ pip install sickserv --user
 
 ## Communication Flow
 
+Initial payloads are always JSON (with a defined endpoint), which are then base64 encoded, LZ4 compressed, base64 encoded again, RC4 encrypted, and then sent over HTTP or HTTPS (on any port desired).
+
 ```
 Send data:
 JSON -> base64 encoded values -> LZ4 compress -> base64 encoded -> RC4 encrypt -> send (HTTPS)
@@ -25,14 +27,14 @@ recv (HTTPS) -> RC4 decrypt -> base64 decode -> LZ4 decompress -> base64 decode 
 
 ## Simple Example (non-WebSocket)
 
-More documentation/details/examples to come...
+See the `examples/` folder for more examples.
 
 Server:
 ```python
-from sickserv import server
-from sickserv.server import response, set_init_key
+from sickserv import server, set_init_key
+from sickserv.server import response
 
-server.set_init_key('yellow-submarine')
+set_init_key('yellow-submarine')
 
 @server.app.route('/test/<sysid>', methods=['POST',])
 async def test(request, sysid):
@@ -47,15 +49,14 @@ server.run(port=1337)
 
 Client:
 ```python
-from sickserv import SickServClient
+from sickserv import SickServClient, set_init_key
 
-key = 'yellow-submarine'
+set_init_key('yellow-submarine')
+ssc = SickServClient('127.0.0.1', port=1337)
 payload = {
     'endpoint': 'test',
     'example': b'This is some example test data'
 }
-
-ssc = SickServClient(key, '127.0.0.1', port=1337)
 response = ssc.send(payload)
 print(response)
 ```
