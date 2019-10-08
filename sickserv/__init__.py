@@ -2,5 +2,7 @@
 sickserv
 """
 
-from .util import __version__
-from .client import SickServClient, SickServWSClient, set_init_key
+__version__ = '0.0.3'
+
+from .client import SickServClient, SickServWSClient
+from .util import set_init_key

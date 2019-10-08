@@ -7,10 +7,9 @@ import base64
 import random
 import lz4.frame
 
+from . import __version__
 from .rc4 import encrypt, decrypt
 from string import ascii_lowercase as alphabet
-
-__version__ = '0.0.3'
 
 BANNER = r"""
   _____ ____   __  __  _  _____   ___  ____  __ __ 
