@@ -78,35 +78,23 @@ def process_payload(sysid, payload, key=None):
     # lookup key if none given
     if not key:
         key = get_key(sysid)
-    # prep
-    p_payload = prep_payload(payload)
-    # compress
-    c_payload = lz4_compress(p_payload)
-    # base64 encode
-    be_payload = base64_encode(c_payload)
-    # encrypt
-    e_payload = rc4_encrypt(key, be_payload)
 
-    return e_payload
+    # prep payload -> lz4 compress -> base64 encode -> rc4 encrypt
+    return rc4_encrypt(key, base64_encode(lz4_compress(prep_payload(payload))))
 
 
 def unprocess_payload(sysid, payload, key=None):
     # lookup key if none given
     if not key:
         key = get_key(sysid)
-    # decrypt
+    # rc4 decrypt
     try:
-        d_response = rc4_decrypt(key, payload)
+        decrypted_payload = rc4_decrypt(key, payload)
     except UnicodeDecodeError:
         raise DecryptionError('Could not decrypt payload, wrong key?')
-    # base64 decode
-    b_response = base64_decode(d_response)
-    # decompress
-    x_payload = lz4_decompress(b_response)
-    # unprep
-    final_payload = unprep_payload(x_payload)
 
-    return final_payload
+    # base64 decode -> lz4 decompress -> unprep payload
+    return unprep_payload(lz4_decompress(base64_decode(decrypted_payload)))
 
 
 def gen_random_key(length=16):
