@@ -7,7 +7,6 @@ import base64
 import random
 import lz4.frame
 
-from . import __version__
 from .rc4 import encrypt, decrypt
 from string import ascii_lowercase as alphabet
 
@@ -21,7 +20,7 @@ BANNER = r"""
   \___||____\____||__|\_| \___||_____||__|\_| \_/  
 
     v{ver} - {url} 
-""".format(ver=__version__, url='https://github.com/vesche/sickserv')
+""".format(ver='0.0.4', url='https://github.com/vesche/sickserv')
 INIT_KEY = 'sickservsickserv'
 KEY_TABLE = {}
 

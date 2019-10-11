@@ -1,13 +1,12 @@
 #!/usr/bin/env python
 
-import sickserv
-
 from setuptools import setup
 
+__version__ = '0.0.4'
 
 setup(
     name='sickserv',
-    version=sickserv.__version__,
+    version=__version__,
     author='Austin Jackson',
     author_email='vesche@protonmail.com',
     url='https://github.com/vesche/sickserv',
