@@ -9,7 +9,7 @@ ssc = SickServWSClient('127.0.0.1', port=1337)
 ssc.subscribe(endpoint='test')
 payload = {
     'endpoint': 'test',
-    'example': b'This is some example test data'
+    'example': 'This is some example test data'
 }
 ssc.send(payload)
 

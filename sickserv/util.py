@@ -71,7 +71,7 @@ def prep_payload(payload):
 def unprep_payload(payload):
     dict_payload = json.loads(payload)
     for k, v in dict_payload.items():
-        dict_payload[k] = base64_decode(str.encode(v))
+        dict_payload[k] = base64_decode(str.encode(v)).decode('utf-8')
     return dict_payload
 
 

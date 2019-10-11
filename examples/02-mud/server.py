@@ -37,7 +37,7 @@ def get_map_payload():
 @server.app.route('/init/<sysid>', methods=['POST',])
 async def init(request, sysid):
     payload = server.unprocess_payload(sysid, request.body)
-    char = payload['char'].decode('utf-8')
+    char = payload['char']
     # random starting location between (1, 1) and (8, 8)
     x, y = random.randint(1, 8), random.randint(1, 8)
     # register character
@@ -48,7 +48,7 @@ async def init(request, sysid):
 @server.app.route('/move/<sysid>', methods=['POST',])
 async def move(request, sysid):
     payload = server.unprocess_payload(sysid, request.body)
-    direction = payload['direction'].decode('utf-8')
+    direction = payload['direction']
     x, y = PLAYERS[sysid]['location']
 
     if direction == 'north':
@@ -74,7 +74,7 @@ async def move(request, sysid):
 @server.app.route('/chat/<sysid>', methods=['POST',])
 async def chat(request, sysid):
     payload = server.unprocess_payload(sysid, request.body)
-    text_message = payload['text'].decode('utf-8')
+    text_message = payload['text']
     for _, player in PLAYERS.items():
         player['chat_queue'] += '{0} says: {1}\n'.format(player['char'], text_message)
     chat_queue = PLAYERS[sysid]['chat_queue']

@@ -38,7 +38,7 @@ def main():
         return None
 
     response = ssc.send(payload)
-    message = response['message'].decode('utf-8')
+    message = response['message']
     if message == 'logout':
         sys.exit(0)
     print(message)
@@ -48,7 +48,7 @@ if __name__ == '__main__':
     c = input('What would you like your character letter to be (one letter)? ')
     payload = {'endpoint': 'init', 'char': c}
     response = ssc.send(payload)
-    print(response['message'].decode('utf-8'))
+    print(response['message'])
 
     while True:
         main()
