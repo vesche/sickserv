@@ -66,6 +66,8 @@ def main():
             continue
 
         if repr(user_input) == 'KEY_DELETE':
+            if msglen <= 2:
+                continue
             with term.location(msglen-1, term.height):
                 print(' ', end='')
             msg = msg[:-1]
