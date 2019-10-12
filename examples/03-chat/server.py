@@ -27,7 +27,6 @@ async def chat(request, ws, sysid):
 async def queue(request, ws, sysid):
     while True:
         await ws.recv()
-        print(CHAT_QUEUE)
         if CHAT_QUEUE[sysid]:
             for c in CHAT_QUEUE[sysid]:
                 return_payload = server_ws.process_payload(sysid, c)

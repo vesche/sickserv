@@ -9,33 +9,44 @@ from sickserv import SickServWSClient, set_init_key
 
 set_init_key('yellow-submarine')
 ssc = SickServWSClient('127.0.0.1', port=1337)
-ssc.subscribe(endpoint='init')
-ssc.send({'endpoint': 'init'})
-ssc.subscribe(endpoint='send')
-ssc.subscribe(endpoint='queue')
-
 term = Terminal()
+print(term.clear + 'sickserv chat :)')
+messages = []
 
 def draw_prompt():
     with term.location(0, term.height):
         print('> ' + ' '*(term.width-2), end='')
 
+def print_messages():
+    scroll_up = term.height-1
+    for message in messages[::-1]:
+        scroll_up -= 1
+        if scroll_up:
+            with term.location(0, scroll_up):
+                print(term.clear_eol + message)
+        else: break
+
 def recv_chat():
-    M = 1
     while True:
         ssc.send({'endpoint': 'queue', 'a':'b'})
         response = ssc.recv('queue')
         if not response:
-            time.sleep(1)
+            time.sleep(.1)
             continue
-        with term.location(0, M):
-            for r in response:
-                print(r['sysid'] + ': ' + r['message'])
-                M += 1
+        for r in response:
+            messages.append(r['sysid'] + ': ' + r['message'])
+        print_messages()
 
-rt = threading.Thread(target=recv_chat)
-rt.daemon = True
-rt.start()
+def ssc_connect():
+    print('Connecting...')
+    ssc.subscribe(endpoint='init')
+    ssc.send({'endpoint': 'init'})
+    ssc.subscribe(endpoint='send')
+    ssc.subscribe(endpoint='queue')
+    rt = threading.Thread(target=recv_chat)
+    rt.daemon = True
+    rt.start()
+    print('Connected!')
 
 def main():
     msg = ''
@@ -68,4 +79,5 @@ def main():
                 msglen += 1
 
 if __name__ == '__main__':
+    ssc_connect()
     main()
