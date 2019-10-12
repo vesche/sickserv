@@ -28,7 +28,7 @@ def print_messages():
 
 def recv_chat():
     while True:
-        ssc.send({'endpoint': 'queue', 'a':'b'})
+        ssc.send({'endpoint': 'queue'})
         response = ssc.recv('queue')
         if not response:
             time.sleep(.1)
