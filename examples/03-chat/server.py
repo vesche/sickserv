@@ -10,9 +10,8 @@ CHAT_QUEUE = {
 
 @server_ws.app.websocket('/init/<sysid>')
 async def init(request, ws, sysid):
-    while True:
-        await ws.recv()
-        CHAT_QUEUE[sysid] = []
+    await ws.recv()
+    CHAT_QUEUE[sysid] = []
 
 @server_ws.app.websocket('/send/<sysid>')
 async def chat(request, ws, sysid):
