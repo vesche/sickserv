@@ -55,7 +55,7 @@ class SickServClient:
     def rekey(self, key='', length=16):
         payload = {'endpoint': 'rekey', 'key': key, 'length': str(length)}
         response = self.send(payload)
-        new_key = response['key'].decode('utf-8')
+        new_key = response['key']
         set_key(SYSID, new_key)
 
     def send(self, payload):
@@ -136,7 +136,7 @@ class SickServWSClient:
                 attempts -= 1
                 
         # set new key
-        new_key = response['key'].decode('utf-8')
+        new_key = response['key']
         set_key(SYSID, new_key)
 
     def send(self, payload):

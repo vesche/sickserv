@@ -17,7 +17,7 @@ app = Sanic()
 async def rekey(request, sysid):
     payload = unprocess_payload(sysid, request.body)
 
-    new_key = payload['key'].decode('utf-8')
+    new_key = payload['key']
     if not new_key:
         new_key = gen_random_key(int(payload['length']))
     return_payload = process_payload(sysid, {'key': new_key})
