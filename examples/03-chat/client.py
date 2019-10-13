@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+import sys
 import time
 import threading
 
@@ -58,8 +59,16 @@ def main():
             user_input = term.inkey()
 
         if repr(user_input) == 'KEY_ENTER':
-            payload = {'endpoint': 'send', 'message': msg}
-            ssc.send(payload)
+            if msg == '/rekey':
+                ssc.rekey()
+            elif msg == '/quit':
+                ssc.unsubscribe('init')
+                ssc.unsubscribe('send')
+                ssc.unsubscribe('queue')
+                sys.exit(0)
+            else:
+                payload = {'endpoint': 'send', 'message': msg}
+                ssc.send(payload)
             msg = ''
             msglen = 2
             draw_prompt()
@@ -82,4 +91,5 @@ def main():
 
 if __name__ == '__main__':
     ssc_connect()
+    print('/rekey - Rekey session.\n/quit - Quit chat.')
     main()
