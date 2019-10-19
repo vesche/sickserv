@@ -5,10 +5,10 @@ sickserv.util
 import json
 import base64
 import random
-import lz4.frame
 
-from .rc4 import encrypt, decrypt
 from string import ascii_lowercase as alphabet
+from sickserv.rc4 import encrypt as rc4_encrypt
+from sickserv.rc4 import decrypt as rc4_decrypt
 
 BANNER = r"""
   _____ ____   __  __  _  _____   ___  ____  __ __ 
@@ -20,67 +20,53 @@ BANNER = r"""
   \___||____\____||__|\_| \___||_____||__|\_| \_/  
 
     v{ver} - {url} 
-""".format(ver='0.0.5', url='https://github.com/vesche/sickserv')
+""".format(ver='0.0.6', url='https://github.com/vesche/sickserv')
 INIT_KEY = 'sickservsickserv'
 KEY_TABLE = {}
 
 
 def base64_encode(data):
+    if type(data) == str:
+        data = str.encode(data)
     return base64.encodebytes(data).decode('utf-8')
 
 
 def base64_decode(data):
-    return base64.decodebytes(data)
-
-
-def lz4_compress(data):
-    return lz4.frame.compress(data)
-
-
-def lz4_decompress(data):
-    return lz4.frame.decompress(data)
-
-
-def rc4_encrypt(key, data):
-    return encrypt(key, data)
-
-
-def rc4_decrypt(key, data):
-    return str.encode(decrypt(key, data))
+    if type(data) == str:
+        data = str.encode(data)
+    return base64.decodebytes(data).decode('utf-8')
 
 
 class DecryptionError(Exception):
     pass
 
 
-def prep_payload(payload):
-    """
-    base64 encode data, utf-8 decode, return json as bytes
-    """
-    # this is assuming the dict is flat
+def iter_payload(payload, encode_mode):
     for k, v in payload.items():
-        if type(v) == str:
-            v = str.encode(v)
-        payload[k] = base64_encode(v)
+        if isinstance(v, dict):
+            iter_payload(v, encode_mode=encode_mode)
+        else:
+            if encode_mode:
+                payload[k] = base64_encode(v)
+            else:
+                payload[k] = base64_decode(v)
+    return payload
 
-    json_payload = json.dumps(payload)
-    return str.encode(json_payload)
+
+def prep_payload(payload):
+    return json.dumps(iter_payload(payload, encode_mode=True))
 
 
 def unprep_payload(payload):
-    dict_payload = json.loads(payload)
-    for k, v in dict_payload.items():
-        dict_payload[k] = base64_decode(str.encode(v)).decode('utf-8')
-    return dict_payload
+    return iter_payload(json.loads(payload), encode_mode=False)
 
 
 def process_payload(sysid, payload, key=None):
     # lookup key if none given
     if not key:
         key = get_key(sysid)
-
-    # prep payload -> lz4 compress -> base64 encode -> rc4 encrypt
-    return rc4_encrypt(key, base64_encode(lz4_compress(prep_payload(payload))))
+    # prep payload and rc4 encrypt
+    return rc4_encrypt(key, prep_payload(payload))
 
 
 def unprocess_payload(sysid, payload, key=None):
@@ -92,9 +78,8 @@ def unprocess_payload(sysid, payload, key=None):
         decrypted_payload = rc4_decrypt(key, payload)
     except UnicodeDecodeError:
         raise DecryptionError('Could not decrypt payload, wrong key?')
-
-    # base64 decode -> lz4 decompress -> unprep payload
-    return unprep_payload(lz4_decompress(base64_decode(decrypted_payload)))
+    # unprep payload
+    return unprep_payload(decrypted_payload)
 
 
 def gen_random_key(length=16):

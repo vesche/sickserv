@@ -8,7 +8,7 @@ import requests
 import threading
 import websocket
 
-from .util import process_payload, unprocess_payload, set_key
+from sickserv.util import process_payload, unprocess_payload, set_key
 
 SYSID = str(uuid.uuid1(uuid.getnode(),0))[24:]
 WS_INCOMING = dict()
@@ -34,7 +34,7 @@ def check_payload(payload):
     # ensure payload is a dictionary (for later JSON serialization)
     if type(payload) != dict:
         raise PayloadNotDict(
-            'Payload must be a dictionary, received: {0}'.format(type(payload))
+            f'Payload must be a dictionary, received: {type(payload)}'
         )
     # ensure payload has a mandatory "endpoint" key
     if 'endpoint' not in payload:
@@ -48,9 +48,9 @@ class SickServClient:
     def __init__(self, server, port=443):
         self.session = requests.Session()
         if port == 443:
-            self.base_url = 'https://{s}/'.format(s=server)
+            self.base_url = f'https://{server}/'
         else:
-            self.base_url = 'http://{s}:{p}/'.format(s=server, p=port)
+            self.base_url = f'http://{server}:{port}/'
 
     def rekey(self, key='', length=16):
         payload = {'endpoint': 'rekey', 'key': key, 'length': str(length)}
@@ -80,7 +80,7 @@ def ws_on_message(ws, message):
 class SickServWSClient:
     def __init__(self, server, port=443, ws_timeout=1000, debug=False):
         self.ws_timeout = ws_timeout
-        self.url = 'ws://{s}:{p}/'.format(s=server, p=port)
+        self.url = f'ws://{server}:{port}/'
         self.subscriptions = {} # holds websockets for all subs {'rekey': ws, ... }
 
         # enable debug mode, ws trace

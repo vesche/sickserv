@@ -6,7 +6,7 @@ from sanic import Sanic
 from sanic import response
 from sanic.websocket import WebSocketProtocol
 
-from .util import (
+from sickserv.util import (
     process_payload, unprocess_payload,
     BANNER, gen_random_key, set_key, set_init_key
 )

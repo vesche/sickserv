@@ -8,21 +8,20 @@ This is a Python 3 client/server wrapper to rapidly create fast, encrypted appli
 ## Install
 
 Do it up:
-
 ```
 $ pip install sickserv --user
 ```
 
 ## Communication Flow
 
-Initial payloads are always JSON (with a defined endpoint), which are then base64 encoded, LZ4 compressed, base64 encoded again, RC4 encrypted, and then sent over HTTP or HTTPS (on any port desired).
+Initial payloads are always JSON (with a defined endpoint), which are then base64 encoded, RC4 encrypted, and then sent over HTTP or HTTPS (on any port desired).
 
 ```
 Send data:
-JSON -> base64 encoded values -> LZ4 compress -> base64 encoded -> RC4 encrypt -> send (HTTPS)
+JSON -> base64 encode values -> RC4 encrypt -> send (HTTPS)
 
 Recv data:
-recv (HTTPS) -> RC4 decrypt -> base64 decode -> LZ4 decompress -> base64 decode values -> JSON
+recv (HTTPS) -> RC4 decrypt -> base64 decode values -> JSON
 ```
 
 ## Simple Example (non-WebSocket)
@@ -73,7 +72,7 @@ $ python3 test_server.py
  \    | |  \     ||  .  |\    ||     ||  .  \\   /
   \___||____\____||__|\_| \___||_____||__|\_| \_/
 
-    v0.0.5 - https://github.com/vesche/sickserv
+    v0.0.6 - https://github.com/vesche/sickserv
 
 [2019-09-30 00:58:55 -0500] [34827] [INFO] Goin' Fast @ http://0.0.0.0:1337
 [2019-09-30 00:58:55 -0500] [34827] [INFO] Starting worker [34827]

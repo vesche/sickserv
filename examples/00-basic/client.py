@@ -6,7 +6,10 @@ set_init_key('yellow-submarine')
 ssc = SickServClient('127.0.0.1', port=1337)
 payload = {
     'endpoint': 'test',
-    'example': 'This is some example test data'
+    'example': {
+        'hello': 'world!',
+        'stuff': 'and things!'
+    }
 }
 response = ssc.send(payload)
 print(response)
