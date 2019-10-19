@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 
 from sickserv import server_ws, set_init_key
 from sickserv.server_ws import response

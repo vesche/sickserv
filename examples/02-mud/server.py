@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 import random
 
 from sickserv import server, set_init_key
