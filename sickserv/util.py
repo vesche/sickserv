@@ -20,7 +20,7 @@ BANNER = r"""
   \___||____\____||__|\_| \___||_____||__|\_| \_/  
 
     v{ver} - {url} 
-""".format(ver='0.0.6', url='https://github.com/vesche/sickserv')
+""".format(ver='0.0.7', url='https://github.com/vesche/sickserv')
 INIT_KEY = 'sickservsickserv'
 KEY_TABLE = {}
 
@@ -45,6 +45,11 @@ def iter_payload(payload, encode_mode):
     for k, v in payload.items():
         if isinstance(v, dict):
             iter_payload(v, encode_mode=encode_mode)
+        elif isinstance(v, list):
+            if encode_mode:
+                payload[k] = [base64_encode(i) for i in v]
+            else:
+                payload[k] = [base64_decode(i) for i in v]
         else:
             if encode_mode:
                 payload[k] = base64_encode(v)

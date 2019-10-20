@@ -9,7 +9,8 @@ payload = {
     'example': {
         'hello': 'world!',
         'stuff': 'and things!'
-    }
+    },
+    'test': ['a','b','c']
 }
 response = ssc.send(payload)
 print(response)
