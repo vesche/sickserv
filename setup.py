@@ -2,7 +2,7 @@
 
 from setuptools import setup
 
-__version__ = '0.0.7'
+__version__ = '0.1.0'
 
 setup(
     name='sickserv',
@@ -22,7 +22,7 @@ setup(
     ],
     python_requires='>=3',
     classifiers=(
-        'Development Status :: 2 - Pre-Alpha',
+        'Development Status :: 4 - Beta',
         'Intended Audience :: Information Technology',
         'License :: OSI Approved :: MIT License',
         'Programming Language :: Python :: 3',

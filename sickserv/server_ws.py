@@ -16,6 +16,9 @@ app = Sanic()
 
 @app.websocket('/rekey/<sysid>')
 async def rekey(request, ws, sysid):
+    """
+    Handle a client rekey request.
+    """
     data = await ws.recv()
     payload = unprocess_payload(sysid, data)
 
@@ -31,5 +34,8 @@ async def rekey(request, ws, sysid):
 
 
 def run(port=1337):
+    """
+    Start sanic server listening globally on a given port.
+    """
     print(BANNER)
     app.run(host='0.0.0.0', port=port, protocol=WebSocketProtocol)

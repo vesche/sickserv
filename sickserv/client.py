@@ -31,6 +31,9 @@ class WSCouldNotConnect(Exception):
 
 
 def check_payload(payload):
+    """
+    Check a payload before processing.
+    """
     # ensure payload is a dictionary (for later JSON serialization)
     if type(payload) != dict:
         raise PayloadNotDict(
@@ -41,10 +44,12 @@ def check_payload(payload):
         raise EndpointUndefined(
             'You must supply an "endpoint" in the payload!'
         )
-    return payload
 
 
 class SickServClient:
+    """
+    sickserv Client, uses requests.
+    """
     def __init__(self, server, port=443):
         self.session = requests.Session()
         if port == 443:
@@ -60,7 +65,7 @@ class SickServClient:
 
     def send(self, payload):
         # ensure payload is proper
-        payload = check_payload(payload)
+        check_payload(payload)
         endpoint = payload.pop('endpoint')
         # encrypt payload
         enc_payload = process_payload(SYSID, payload)
@@ -78,6 +83,9 @@ def ws_on_message(ws, message):
 
 
 class SickServWSClient:
+    """
+    sickserv websocket Client, uses websocket-client.
+    """
     def __init__(self, server, port=443, ws_timeout=1000, debug=False):
         self.ws_timeout = ws_timeout
         self.url = f'ws://{server}:{port}/'
@@ -112,7 +120,9 @@ class SickServWSClient:
                 time.sleep(1)
                 conn_timeout -= 1
         except AttributeError:
-            raise WSCouldNotConnect('Websocket could not be created, server down?')
+            raise WSCouldNotConnect(
+                'Websocket could not be created, server down?'
+            )
 
     def unsubscribe(self, endpoint):
         ws = self._get_ws(endpoint)
@@ -141,7 +151,7 @@ class SickServWSClient:
 
     def send(self, payload):
         # ensure payload is proper
-        payload = check_payload(payload)
+        check_payload(payload)
         endpoint = payload.pop('endpoint')
         # encrypt payload
         enc_payload = process_payload(SYSID, payload)
