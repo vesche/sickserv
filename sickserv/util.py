@@ -34,7 +34,10 @@ def base64_encode(data):
 def base64_decode(data):
     if type(data) == str:
         data = str.encode(data)
-    return base64.decodebytes(data).decode('utf-8')
+    try:
+        return base64.decodebytes(data).decode('utf-8')
+    except UnicodeDecodeError:
+        return base64.decodebytes(data)
 
 
 class DecryptionError(Exception):

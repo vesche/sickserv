@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 
+import os
+
 from sickserv import SickServClient, set_init_key
 
 set_init_key('yellow-submarine')
@@ -10,7 +12,8 @@ payload = {
         'hello': 'world!',
         'stuff': 'and things!'
     },
-    'test': ['a','b','c']
+    'test': ['a','b','c'],
+    'binary': os.urandom(32)
 }
 response = ssc.send(payload)
 print(response)
