@@ -1,9 +1,15 @@
 # sickserv
 
-This is a Python 3 client/server wrapper & framework to rapidly create fast, encrypted, asynchronous, multi-client applications.
+This is a Python 3.6+ client-server wrapper & framework that allows you to rapidly build simple, fast, encrypted, asynchronous, multi-client application communication.
 
-* Server is [Sanic](https://github.com/huge-success/sanic) (async) with WebSocket support
-* Client uses [requests](https://github.com/psf/requests) or [websocket-client](https://github.com/websocket-client/websocket-client)
+Highlights:
+* Client/server wrapper around [Sanic](https://github.com/huge-success/sanic), [requests](https://github.com/psf/requests), and [websocket-client](https://github.com/websocket-client/websocket-client).
+* Provides a framework for multi-client communication, based around unique system identifiers.
+* Supports simplistically sending and receiving RC4 encrypted JSON payloads.
+* Supports sending either string or byte values using base64 encoding.
+* Provides a client and server for either websocket or non-websocket applications.
+* Natively asynchronous, provided by Sanic.
+* Client/server support for RC4 rekey on-the-fly.
 
 ## Install
 
