@@ -38,6 +38,7 @@ set_init_key('yellow-submarine')
 @server.app.route('/test/<sysid>', methods=['POST',])
 async def test(request, sysid):
     payload = server.unprocess_payload(sysid, request.body)
+    print(payload)
     return_payload = server.process_payload(sysid, {'Look Mom': 'No Hands!'})
     return response.text(return_payload)
 
@@ -74,6 +75,7 @@ $ python server.py
 
 [2019-10-26 06:12:47 -0500] [31313] [INFO] Goin' Fast @ http://0.0.0.0:1337
 [2019-10-26 06:12:47 -0500] [31313] [INFO] Starting worker [31313]
+{'example': 'This is some example test data'}
 [2019-10-26 06:12:57 -0500] - (sanic.access)[INFO][127.0.0.1:41550]: POST http://127.0.0.1:1337/test/b0610ba87aa2  200 60
 ```
 
