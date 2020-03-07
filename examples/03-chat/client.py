@@ -2,7 +2,7 @@
 
 import sys
 import time
-import threading
+import _thread as thread
 
 from string import printable
 from blessed import Terminal
@@ -14,9 +14,11 @@ term = Terminal()
 print(term.clear + 'sickserv chat :)')
 messages = []
 
+
 def draw_prompt():
     with term.location(0, term.height):
         print('> ' + ' '*(term.width-2), end='')
+
 
 def print_messages():
     scroll_up = term.height-1
@@ -27,10 +29,10 @@ def print_messages():
                 print(term.clear_eol + message)
         else: break
 
+
 def recv_chat():
     while True:
-        ssc.send({'endpoint': 'queue'})
-        response = ssc.recv('queue')
+        response = ssc.recv('chat')
         if not response:
             time.sleep(.1)
             continue
@@ -38,19 +40,16 @@ def recv_chat():
             messages.append(r['sysid'] + ': ' + r['message'])
         print_messages()
 
+
 def ssc_connect():
     print('Connecting...')
-    ssc.subscribe(endpoint='init')
-    ssc.send({'endpoint': 'init'})
-    ssc.subscribe(endpoint='send')
-    ssc.subscribe(endpoint='queue')
-    rt = threading.Thread(target=recv_chat)
-    rt.daemon = True
-    rt.start()
+    ssc.subscribe(endpoint='chat')
+    thread.start_new_thread(recv_chat, ())
     print('Connected!')
 
+
 def main():
-    msg = ''
+    msg = str()
     msglen = 2
     draw_prompt()
 
@@ -62,14 +61,12 @@ def main():
             if msg == '/rekey':
                 ssc.rekey()
             elif msg == '/quit':
-                ssc.unsubscribe('init')
-                ssc.unsubscribe('send')
-                ssc.unsubscribe('queue')
+                ssc.unsubscribe('chat')
                 sys.exit(0)
             else:
-                payload = {'endpoint': 'send', 'message': msg}
+                payload = {'endpoint': 'chat', 'message': msg}
                 ssc.send(payload)
-            msg = ''
+            msg = str()
             msglen = 2
             draw_prompt()
             continue
@@ -88,6 +85,7 @@ def main():
                 print(user_input, end='')
                 msg += user_input
                 msglen += 1
+
 
 if __name__ == '__main__':
     ssc_connect()
