@@ -77,7 +77,7 @@ $ python server.py
  \    | |  \     ||  .  |\    ||     ||  .  \\   / 
   \___||____\____||__|\_| \___||_____||__|\_| \_/  
 
-    v0.1.0 - https://github.com/vesche/sickserv 
+    v0.1.1 - https://github.com/vesche/sickserv 
 
 [2019-10-26 06:12:47 -0500] [31313] [INFO] Goin' Fast @ http://0.0.0.0:1337
 [2019-10-26 06:12:47 -0500] [31313] [INFO] Starting worker [31313]
@@ -88,7 +88,7 @@ $ python server.py
 Client side:
 ```
 $ python test_client.py
-{'Look Mom': b'No Hands!'}
+{'Look Mom': 'No Hands!'}
 ```
 
 ## Rekey
