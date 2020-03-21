@@ -2,7 +2,7 @@
 
 import sys
 import time
-import _thread as thread
+import threading
 
 from string import printable
 from blessed import Terminal
@@ -44,7 +44,9 @@ def recv_chat():
 def ssc_connect():
     print('Connecting...')
     ssc.subscribe(endpoint='chat')
-    thread.start_new_thread(recv_chat, ())
+    t = threading.Thread(target=recv_chat)
+    t.daemon = True
+    t.start()
     print('Connected!')
 
 
