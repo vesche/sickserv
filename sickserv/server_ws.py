@@ -11,7 +11,7 @@ from sickserv.util import (
     BANNER, gen_random_key, set_key, set_init_key
 )
 
-app = Sanic()
+app = Sanic(name='sickserv.server_ws')
 
 
 @app.websocket('/rekey/<sysid>')

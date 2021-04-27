@@ -89,7 +89,7 @@ class SickServWSClient:
     def __init__(self, server, port=443, ws_timeout=1000, debug=False):
         self.ws_timeout = ws_timeout
         self.url = f'ws://{server}:{port}/'
-        self.subscriptions = {} # holds websockets for all subs {'rekey': ws, ... }
+        self.subscriptions = dict() # holds websockets for all subs {'rekey': ws, ... }
 
         # enable debug mode, ws trace
         if debug:

@@ -69,7 +69,7 @@ async def move(request, sysid):
     else:
         PLAYERS[sysid]['location'] = (mx, my)
         return_payload = server.process_payload(
-            sysid, {'message': 'You moved {d}!'.format(d=direction)}
+            sysid, {'message': f'You moved {direction}!'}
         )
     return response.text(return_payload)
 
@@ -78,7 +78,7 @@ async def chat(request, sysid):
     payload = server.unprocess_payload(sysid, request.body)
     text_message = payload['text']
     for _, player in PLAYERS.items():
-        player['chat_queue'] += '{0} says: {1}\n'.format(player['char'], text_message)
+        player['chat_queue'] += f'{player["char"]} says: {text_message}\n'
     chat_queue = PLAYERS[sysid]['chat_queue']
     PLAYERS[sysid]['chat_queue'] = ''
     return_payload = server.process_payload(sysid, {'message': chat_queue})

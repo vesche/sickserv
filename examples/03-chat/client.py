@@ -73,7 +73,7 @@ def main():
             draw_prompt()
             continue
 
-        if repr(user_input) == 'KEY_DELETE':
+        if repr(user_input) == 'KEY_BACKSPACE':
             if msglen <= 2:
                 continue
             with term.location(msglen-1, term.height):

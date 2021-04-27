@@ -20,9 +20,9 @@ BANNER = r"""
   \___||____\____||__|\_| \___||_____||__|\_| \_/  
 
     v{ver} - {url} 
-""".format(ver='0.1.0', url='https://github.com/vesche/sickserv')
+""".format(ver='0.1.2', url='https://github.com/vesche/sickserv')
 INIT_KEY = 'sickservsickserv'
-KEY_TABLE = {}
+KEY_TABLE = dict()
 
 
 def base64_encode(data):
