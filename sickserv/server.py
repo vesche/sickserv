@@ -10,7 +10,7 @@ from sickserv.util import (
     BANNER, gen_random_key, set_key, set_init_key
 )
 
-app = Sanic(name='sickserv.server')
+app = Sanic(name='sickserv-server')
 
 
 @app.route('/rekey/<sysid>', methods=['POST',])

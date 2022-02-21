@@ -20,7 +20,7 @@ BANNER = r"""
   \___||____\____||__|\_| \___||_____||__|\_| \_/  
 
     v{ver} - {url} 
-""".format(ver='0.1.2', url='https://github.com/vesche/sickserv')
+""".format(ver='0.1.3', url='https://github.com/vesche/sickserv')
 INIT_KEY = 'sickservsickserv'
 KEY_TABLE = dict()
 

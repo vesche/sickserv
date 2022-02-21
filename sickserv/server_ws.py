@@ -4,14 +4,13 @@ sickserv.server_ws
 
 from sanic import Sanic
 from sanic import response
-from sanic.websocket import WebSocketProtocol
 
 from sickserv.util import (
     process_payload, unprocess_payload,
     BANNER, gen_random_key, set_key, set_init_key
 )
 
-app = Sanic(name='sickserv.server_ws')
+app = Sanic(name='sickserv-server_ws')
 
 
 @app.websocket('/rekey/<sysid>')
@@ -38,4 +37,4 @@ def run(port=1337):
     Start sanic server listening globally on a given port.
     """
     print(BANNER)
-    app.run(host='0.0.0.0', port=port, protocol=WebSocketProtocol)
+    app.run(host='0.0.0.0', port=port)
